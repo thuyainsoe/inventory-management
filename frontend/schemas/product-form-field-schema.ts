@@ -59,6 +59,15 @@ export const ProductFormFieldsSchema = ({
           options: categoryOptions,
         },
         {
+          id: 15,
+          type: "select" as const,
+          name: "brandId",
+          label: "Brand",
+          placeholder: "Select brand",
+          required: true,
+          options: categoryOptions,
+        },
+        {
           id: 6,
           type: "textarea" as const,
           name: "description",

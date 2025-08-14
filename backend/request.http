@@ -48,3 +48,16 @@ GET  http://localhost:3002/auth/colors
 
 ### Get a color
 GET  http://localhost:3003/api/products
+
+### Get a color
+GET  http://localhost:3003/api/brands
+
+### Get a color
+POST  http://localhost:3003/api/brands
+Content-Type: application/json
+
+{
+    "name" : "Nike",
+    "description": "Nike ki nite"
+}
+

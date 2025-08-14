@@ -297,7 +297,10 @@ export const FormFieldGenerator = React.memo(({ formSchema }: Props) => {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id={field.name}
-                {...register(field.name)}
+                checked={watch(field.name)}
+                onCheckedChange={(checked) => {
+                  setValue(field.name, checked);
+                }}
                 disabled={field.disabled}
               />
               <Label htmlFor={field.name} className="text-sm font-medium">

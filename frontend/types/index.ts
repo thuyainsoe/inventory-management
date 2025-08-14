@@ -2,7 +2,7 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  role: 'admin' | 'manager' | 'staff';
+  role: "admin" | "manager" | "staff";
   avatar?: string;
   createdAt: string;
   updatedAt: string;
@@ -44,6 +44,17 @@ export interface Category {
   updatedAt: string;
 }
 
+export interface Brand {
+  id: number;
+  name: string;
+  description?: string;
+  logo?: string; // URL or path to brand logo
+  isActive: boolean;
+  productCount?: number;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}
+
 export interface Supplier {
   id: string;
   name: string;
@@ -61,7 +72,7 @@ export interface PurchaseOrder {
   id: string;
   orderNumber: string;
   supplierId: string;
-  status: 'draft' | 'pending' | 'approved' | 'received' | 'cancelled';
+  status: "draft" | "pending" | "approved" | "received" | "cancelled";
   totalAmount: number;
   items: PurchaseOrderItem[];
   createdAt: string;
@@ -80,7 +91,7 @@ export interface SalesOrder {
   id: string;
   orderNumber: string;
   customerId: string;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   totalAmount: number;
   items: SalesOrderItem[];
   createdAt: string;
@@ -98,7 +109,7 @@ export interface SalesOrderItem {
 export interface StockMovement {
   id: string;
   productId: string;
-  type: 'in' | 'out' | 'adjustment' | 'transfer';
+  type: "in" | "out" | "adjustment" | "transfer";
   quantity: number;
   reference?: string;
   notes?: string;
@@ -129,7 +140,8 @@ export interface PaginationState {
 export interface SortingState {
   id: string;
   desc: boolean;
-}[]
+}
+[];
 
 export interface ApiResponse<T> {
   data: T;

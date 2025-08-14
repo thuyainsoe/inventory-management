@@ -39,7 +39,10 @@ export function CreateCategoryDrawer({
     formState: { isSubmitting },
     reset,
     formState: { errors },
+    watch,
   } = methods;
+
+  console.log(watch("isActive"));
 
   const onSubmit = async (data: CategoryFormValues) => {
     try {

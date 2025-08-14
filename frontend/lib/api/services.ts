@@ -11,6 +11,7 @@ import type {
   DashboardStats,
   PaginatedResponse,
   ApiResponse,
+  Brand,
 } from "../../types";
 
 // Auth Services
@@ -43,11 +44,14 @@ export const authService = {
 
 // User Services
 export const userService = {
-  getUsers: (params?: { page?: number; limit?: number; search?: string; role?: string }) =>
-    apiClient.get<PaginatedResponse<User>>(API_ENDPOINTS.USERS, { params }),
+  getUsers: (params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    role?: string;
+  }) => apiClient.get<PaginatedResponse<User>>(API_ENDPOINTS.USERS, { params }),
 
-  getUser: (id: number) =>
-    apiClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`),
+  getUser: (id: number) => apiClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`),
 
   createUser: (userData: Partial<User>) =>
     apiClient.post<User>(API_ENDPOINTS.USERS, userData),
@@ -89,8 +93,15 @@ export const productService = {
 
 // Category Services
 export const categoryService = {
-  getCategories: (params?: { page?: number; limit?: number; search?: string; status?: string }) =>
-    apiClient.get<PaginatedResponse<Category>>(API_ENDPOINTS.CATEGORIES, { params }),
+  getCategories: (params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: string;
+  }) =>
+    apiClient.get<PaginatedResponse<Category>>(API_ENDPOINTS.CATEGORIES, {
+      params,
+    }),
 
   getAllCategories: () =>
     apiClient.get<Category[]>(`${API_ENDPOINTS.CATEGORIES}/all`),
@@ -102,7 +113,10 @@ export const categoryService = {
     apiClient.post<Category>(API_ENDPOINTS.CATEGORIES, categoryData),
 
   updateCategory: (id: number, categoryData: Partial<Category>) =>
-    apiClient.patch<Category>(`${API_ENDPOINTS.CATEGORIES}/${id}`, categoryData),
+    apiClient.patch<Category>(
+      `${API_ENDPOINTS.CATEGORIES}/${id}`,
+      categoryData
+    ),
 
   deleteCategory: (id: number) =>
     apiClient.delete<void>(`${API_ENDPOINTS.CATEGORIES}/${id}`),
@@ -114,6 +128,39 @@ export const categoryService = {
       inactive: number;
       withProducts: number;
     }>(`${API_ENDPOINTS.CATEGORIES}/stats`),
+};
+
+// Brand Services
+export const brandService = {
+  getBrands: (params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: string;
+  }) =>
+    apiClient.get<PaginatedResponse<Brand>>(API_ENDPOINTS.BRANDS, { params }),
+
+  getAllBrands: () => apiClient.get<Brand[]>(`${API_ENDPOINTS.BRANDS}/all`),
+
+  getBrand: (id: number) =>
+    apiClient.get<Brand>(`${API_ENDPOINTS.BRANDS}/${id}`),
+
+  createBrand: (brandData: Partial<Brand>) =>
+    apiClient.post<Brand>(API_ENDPOINTS.BRANDS, brandData),
+
+  updateBrand: (id: number, brandData: Partial<Brand>) =>
+    apiClient.patch<Brand>(`${API_ENDPOINTS.BRANDS}/${id}`, brandData),
+
+  deleteBrand: (id: number) =>
+    apiClient.delete<void>(`${API_ENDPOINTS.BRANDS}/${id}`),
+
+  getStats: () =>
+    apiClient.get<{
+      total: number;
+      active: number;
+      inactive: number;
+      withProducts: number;
+    }>(`${API_ENDPOINTS.BRANDS}/stats`),
 };
 
 // Supplier Services
