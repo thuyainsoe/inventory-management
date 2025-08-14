@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number;
   email: string;
   name: string;
   role: 'admin' | 'manager' | 'staff';
@@ -33,11 +33,15 @@ export interface ProductVariant {
 }
 
 export interface Category {
-  id: string;
+  id: number;
   name: string;
   description?: string;
-  parentId?: string;
-  children?: Category[];
+  color: string;
+  icon: string;
+  isActive: boolean;
+  productCount?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Supplier {

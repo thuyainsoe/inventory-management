@@ -97,20 +97,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" onClick={handleGoBack}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold gradient-text">
-                {product.name}
-              </h1>
-              <p className="text-muted-foreground">
-                Product Details & Information
-              </p>
-            </div>
-          </div>
+          <Button variant="outline" onClick={handleGoBack}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
           <div className="flex space-x-2">
             <Button variant="outline" onClick={handleEdit}>
               <Edit className="mr-2 h-4 w-4" />
@@ -198,7 +188,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                     <label className="text-sm font-medium text-muted-foreground">
                       Selling Price
                     </label>
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-xl font-bold text-green-600">
                       {formatCurrency(product.price)}
                     </p>
                   </div>
@@ -206,7 +196,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                     <label className="text-sm font-medium text-muted-foreground">
                       Cost Price
                     </label>
-                    <p className="text-2xl font-bold text-orange-600">
+                    <p className="text-xl font-bold text-orange-600">
                       {formatCurrency(product.cost)}
                     </p>
                   </div>
@@ -214,7 +204,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                     <label className="text-sm font-medium text-muted-foreground">
                       Profit Margin
                     </label>
-                    <p className="text-2xl font-bold text-blue-600">
+                    <p className="text-xl font-bold text-blue-600">
                       {(
                         ((product.price - product.cost) / product.price) *
                           100 || 0
@@ -264,7 +254,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                     Current Stock
                   </label>
                   <div className="flex items-center space-x-2 mt-1">
-                    <span className="text-3xl font-bold">{product.stock}</span>
+                    <span className="text-2xl font-bold">{product.stock}</span>
                     <Badge
                       variant="secondary"
                       className={

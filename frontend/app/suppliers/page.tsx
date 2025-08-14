@@ -20,14 +20,8 @@ import type { Supplier } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { PageHeader } from "@/components/ui/page-header";
-
-// Mock user data
-const mockUser = {
-  name: "John Doe",
-  email: "john@example.com",
-  role: "Admin",
-  avatar: undefined,
-};
+import ProtectedRoute from "@/components/auth/protected-route";
+import { useAuth } from "@/contexts/auth-context";
 
 // Mock suppliers data
 const mockSuppliers: Supplier[] = [
@@ -147,6 +141,7 @@ const getPaymentTermsBadgeColor = (terms: string) => {
 };
 
 export default function SuppliersPage() {
+  const { user } = useAuth();
   const [suppliers] = useState<Supplier[]>(mockSuppliers);
 
   const handleEdit = (supplier: Supplier) => {
@@ -295,7 +290,8 @@ export default function SuppliersPage() {
   }).length;
 
   return (
-    <MainLayout user={mockUser}>
+    <ProtectedRoute>
+      <MainLayout user={user || undefined}>
       <div className="space-y-6">
         {/* Page Header */}
         <PageHeader
@@ -388,5 +384,6 @@ export default function SuppliersPage() {
         </Card>
       </div>
     </MainLayout>
+    </ProtectedRoute>
   );
 }

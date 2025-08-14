@@ -74,8 +74,7 @@ export default function ProductsPage() {
   };
 
   const handleAddProduct = () => {
-    console.log("Add new product");
-    // Implement add product logic - could open a modal or navigate to add page
+    router.push("/products/create");
   };
 
   // Extract products and pagination info
@@ -129,7 +128,7 @@ export default function ProductsPage() {
         const status = getStockStatus(stock, minStock);
 
         return (
-          <div className="flex items-center space-x-2 min-w-[100px]">
+          <div className="flex items-center space-x-2 min-w-[150px]">
             <span className="font-medium">{stock}</span>
             <Badge
               variant="secondary"
@@ -147,9 +146,11 @@ export default function ProductsPage() {
       accessorKey: "barcode",
       header: "Barcode",
       cell: ({ row }) => (
-        <code className="text-sm bg-muted px-2 py-1 rounded">
-          {row.getValue("barcode")}
-        </code>
+        <div className="min-w-[150px]">
+          <code className="text-sm bg-muted px-2 py-1 rounded min-w-[120px]">
+            {row.getValue("barcode")}
+          </code>
+        </div>
       ),
     },
     {
@@ -195,140 +196,133 @@ export default function ProductsPage() {
   return (
     <ProtectedRoute>
       <MainLayout user={user || undefined}>
-      <div className="space-y-6">
-        {/* Page Header */}
-        <PageHeader
-          title="Products"
-          description="Manage your product inventory"
-          action={{
-            label: "Add Product",
-            onClick: handleAddProduct,
-            icon: <Plus className="h-4 w-4" />,
-          }}
-        />
+        <div className="space-y-6">
+          {/* Page Header */}
+          <PageHeader
+            title="Products"
+            description="Manage your product inventory"
+            action={{
+              label: "Add Product",
+              onClick: handleAddProduct,
+              icon: <Plus className="h-4 w-4" />,
+            }}
+          />
 
-        {/* Stats Cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="modern-card border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Products
-              </CardTitle>
-              <div className="p-2 rounded-lg gradient-blue text-white">
-                <Package className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-foreground">
-                {totalProducts}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Active products in inventory
-              </p>
-            </CardContent>
-          </Card>
+          {/* Stats Cards */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Card className="modern-card border-0">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Products
+                </CardTitle>
+                <div className="p-2 rounded-lg gradient-blue text-white">
+                  <Package className="h-4 w-4" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-foreground">
+                  {totalProducts}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Active products in inventory
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="modern-card border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Stock Value
-              </CardTitle>
-              <div className="p-2 rounded-lg gradient-green text-white">
-                <TrendingUp className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-foreground">
-                {formatCurrency(totalValue)}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Current inventory value
-              </p>
-            </CardContent>
-          </Card>
+            <Card className="modern-card border-0">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Stock Value
+                </CardTitle>
+                <div className="p-2 rounded-lg gradient-green text-white">
+                  <TrendingUp className="h-4 w-4" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-foreground">
+                  {formatCurrency(totalValue)}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Current inventory value
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="modern-card border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Stock Units
-              </CardTitle>
-              <div className="p-2 rounded-lg gradient-purple text-white">
-                <Package className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-foreground">
-                {totalStock.toLocaleString()}
-              </div>
-              <p className="text-sm text-muted-foreground">Units in stock</p>
-            </CardContent>
-          </Card>
+            <Card className="modern-card border-0">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Stock Units
+                </CardTitle>
+                <div className="p-2 rounded-lg gradient-purple text-white">
+                  <Package className="h-4 w-4" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-foreground">
+                  {totalStock.toLocaleString()}
+                </div>
+                <p className="text-sm text-muted-foreground">Units in stock</p>
+              </CardContent>
+            </Card>
 
-          <Card className="modern-card border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Low Stock Items
-              </CardTitle>
-              <div className="p-2 rounded-lg gradient-pink text-white">
-                <AlertCircle className="h-4 w-4" />
-              </div>
-            </CardHeader>
+            <Card className="modern-card border-0">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Low Stock Items
+                </CardTitle>
+                <div className="p-2 rounded-lg gradient-pink text-white">
+                  <AlertCircle className="h-4 w-4" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-foreground">
+                  {lowStockCount}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Items needing attention
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Products Table */}
+          <Card className="modern-card border-0 pt-6">
             <CardContent>
-              <div className="text-3xl font-bold text-foreground">
-                {lowStockCount}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Items needing attention
-              </p>
+              {error ? (
+                <div className="text-center py-8">
+                  <p className="text-red-600">
+                    Failed to load products. Please check your backend
+                    connection.
+                  </p>
+                </div>
+              ) : (
+                <DataTable
+                  columns={columns}
+                  data={products}
+                  searchKey="name"
+                  searchPlaceholder="Search products..."
+                  onRowClick={(product) => console.log("Row clicked:", product)}
+                  loading={isLoading}
+                  pagination={{
+                    pageIndex: pagination.pageIndex,
+                    pageSize: pagination.pageSize,
+                    pageCount,
+                    total: totalProducts,
+                  }}
+                  onPaginationChange={setPagination}
+                  onSortingChange={undefined}
+                  onGlobalFilterChange={setGlobalFilter}
+                  manualPagination={true}
+                  manualSorting={true}
+                  enableRowSelection={true}
+                  rowSelection={rowSelection}
+                  onRowSelectionChange={setRowSelection}
+                />
+              )}
             </CardContent>
           </Card>
         </div>
-
-        {/* Products Table */}
-        <Card className="modern-card border-0">
-          <CardHeader>
-            <CardTitle className="text-xl font-semibold">
-              All Products
-            </CardTitle>
-            <CardDescription>
-              Complete product inventory with real-time data from your backend
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {error ? (
-              <div className="text-center py-8">
-                <p className="text-red-600">
-                  Failed to load products. Please check your backend connection.
-                </p>
-              </div>
-            ) : (
-              <DataTable
-                columns={columns}
-                data={products}
-                searchKey="name"
-                searchPlaceholder="Search products..."
-                onRowClick={(product) => console.log("Row clicked:", product)}
-                loading={isLoading}
-                pagination={{
-                  pageIndex: pagination.pageIndex,
-                  pageSize: pagination.pageSize,
-                  pageCount,
-                  total: totalProducts,
-                }}
-                onPaginationChange={setPagination}
-                onSortingChange={undefined}
-                onGlobalFilterChange={setGlobalFilter}
-                manualPagination={true}
-                manualSorting={true}
-                enableRowSelection={true}
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
-              />
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </MainLayout>
+      </MainLayout>
     </ProtectedRoute>
   );
 }

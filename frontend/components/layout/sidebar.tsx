@@ -66,7 +66,9 @@ const navigationItems: NavItem[] = [
     icon: Package,
     children: [
       { title: "All Products", href: "/products" },
-      { title: "Categories", href: "/products/categories" },
+      { title: "Categories", href: "/categories" },
+      { title: "Brands", href: "/brands" },
+      { title: "Units", href: "/units" },
       { title: "Product Variants", href: "/products/variants" },
       { title: "Barcode Management", href: "/products/barcodes" },
     ],
@@ -185,7 +187,7 @@ export function Sidebar({ className }: SidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1.5 p-3">
+        <nav className="flex-1 space-y-2 p-3">
           {navigationItems.map((item) => (
             <div key={item.href}>
               {isCollapsed ? (
@@ -203,7 +205,7 @@ export function Sidebar({ className }: SidebarProps) {
                           item.children && toggleSubmenu(item.href)
                         }
                       >
-                        <item.icon className="h-4 w-4" />
+                        <item.icon className="h-5 w-5" />
                         {item.badge && (
                           <span className="ml-1 rounded-full bg-red-500 px-1 text-xs text-white">
                             {item.badge}
@@ -228,7 +230,7 @@ export function Sidebar({ className }: SidebarProps) {
                       )}
                       onClick={() => item.children && toggleSubmenu(item.href)}
                     >
-                      <item.icon className="mr-2 h-4 w-4" />
+                      <item.icon className="mr-2 h-5 w-5" />
                       <span className="flex-1 text-left">{item.title}</span>
                       {item.badge && (
                         <span className="ml-2 rounded-full bg-red-500 px-2 py-0.5 text-xs text-white">

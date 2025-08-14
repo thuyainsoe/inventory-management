@@ -234,7 +234,7 @@ export function DataTable<TData, TValue>({
                     let stickyClasses = "";
                     if (isSelectColumn) {
                       stickyClasses =
-                        "sticky left-0 z-20 bg-background w-16 px-4";
+                        "sticky left-0 z-20 bg-background w-12 px-4 border-r";
                     } else if (isFirstDataColumn) {
                       const leftOffset = enableRowSelection
                         ? "left-12"
@@ -274,10 +274,10 @@ export function DataTable<TData, TValue>({
                       let stickyClasses = "";
                       if (isSelectColumn) {
                         stickyClasses =
-                          "sticky left-0 z-20 bg-background w-16 px-4";
+                          "sticky left-0 z-20 bg-background w-12 px-4 border-r";
                       } else if (isFirstDataColumn) {
                         const leftOffset = enableRowSelection
-                          ? "left-16"
+                          ? "left-12"
                           : "left-0";
                         stickyClasses = `sticky ${leftOffset} z-10 bg-background border-r`;
                       }
@@ -310,7 +310,7 @@ export function DataTable<TData, TValue>({
                       let stickyClasses = "";
                       if (isSelectColumn) {
                         stickyClasses =
-                          "sticky left-0 z-20 bg-background w-16 px-4";
+                          "sticky left-0 z-20 bg-background w-12 px-4 border-r";
                       } else if (isFirstDataColumn) {
                         const leftOffset = enableRowSelection
                           ? "left-12"

@@ -43,20 +43,20 @@ export const authService = {
 
 // User Services
 export const userService = {
-  getUsers: (params?: { page?: number; limit?: number; search?: string }) =>
+  getUsers: (params?: { page?: number; limit?: number; search?: string; role?: string }) =>
     apiClient.get<PaginatedResponse<User>>(API_ENDPOINTS.USERS, { params }),
 
-  getUser: (id: string) =>
-    apiClient.get<ApiResponse<User>>(`${API_ENDPOINTS.USERS}/${id}`),
+  getUser: (id: number) =>
+    apiClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`),
 
   createUser: (userData: Partial<User>) =>
-    apiClient.post<ApiResponse<User>>(API_ENDPOINTS.USERS, userData),
+    apiClient.post<User>(API_ENDPOINTS.USERS, userData),
 
-  updateUser: (id: string, userData: Partial<User>) =>
-    apiClient.put<ApiResponse<User>>(`${API_ENDPOINTS.USERS}/${id}`, userData),
+  updateUser: (id: number, userData: Partial<User>) =>
+    apiClient.patch<User>(`${API_ENDPOINTS.USERS}/${id}`, userData),
 
-  deleteUser: (id: string) =>
-    apiClient.delete<ApiResponse<null>>(`${API_ENDPOINTS.USERS}/${id}`),
+  deleteUser: (id: number) =>
+    apiClient.delete<void>(`${API_ENDPOINTS.USERS}/${id}`),
 };
 
 // Product Services
@@ -89,23 +89,31 @@ export const productService = {
 
 // Category Services
 export const categoryService = {
-  getCategories: () =>
-    apiClient.get<ApiResponse<Category[]>>(API_ENDPOINTS.CATEGORIES),
+  getCategories: (params?: { page?: number; limit?: number; search?: string; status?: string }) =>
+    apiClient.get<PaginatedResponse<Category>>(API_ENDPOINTS.CATEGORIES, { params }),
+
+  getAllCategories: () =>
+    apiClient.get<Category[]>(`${API_ENDPOINTS.CATEGORIES}/all`),
+
+  getCategory: (id: number) =>
+    apiClient.get<Category>(`${API_ENDPOINTS.CATEGORIES}/${id}`),
 
   createCategory: (categoryData: Partial<Category>) =>
-    apiClient.post<ApiResponse<Category>>(
-      API_ENDPOINTS.CATEGORIES,
-      categoryData
-    ),
+    apiClient.post<Category>(API_ENDPOINTS.CATEGORIES, categoryData),
 
-  updateCategory: (id: string, categoryData: Partial<Category>) =>
-    apiClient.put<ApiResponse<Category>>(
-      `${API_ENDPOINTS.CATEGORIES}/${id}`,
-      categoryData
-    ),
+  updateCategory: (id: number, categoryData: Partial<Category>) =>
+    apiClient.patch<Category>(`${API_ENDPOINTS.CATEGORIES}/${id}`, categoryData),
 
-  deleteCategory: (id: string) =>
-    apiClient.delete<ApiResponse<null>>(`${API_ENDPOINTS.CATEGORIES}/${id}`),
+  deleteCategory: (id: number) =>
+    apiClient.delete<void>(`${API_ENDPOINTS.CATEGORIES}/${id}`),
+
+  getStats: () =>
+    apiClient.get<{
+      total: number;
+      active: number;
+      inactive: number;
+      withProducts: number;
+    }>(`${API_ENDPOINTS.CATEGORIES}/stats`),
 };
 
 // Supplier Services

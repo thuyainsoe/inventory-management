@@ -1,8 +1,10 @@
 import { DataSource } from 'typeorm';
 import { Product } from './product.entity';
+import { Category } from '../categories/category.entity';
 
 export async function seedProducts(dataSource: DataSource) {
   const productRepository = dataSource.getRepository(Product);
+  const categoryRepository = dataSource.getRepository(Category);
 
   const existingProducts = await productRepository.count();
   if (existingProducts > 0) {
@@ -10,13 +12,25 @@ export async function seedProducts(dataSource: DataSource) {
     return;
   }
 
+  // Get category IDs
+  const electronics = await categoryRepository.findOne({ where: { name: 'Electronics' } });
+  const clothing = await categoryRepository.findOne({ where: { name: 'Clothing' } });
+  const books = await categoryRepository.findOne({ where: { name: 'Books' } });
+  const homeGarden = await categoryRepository.findOne({ where: { name: 'Home & Garden' } });
+  const sports = await categoryRepository.findOne({ where: { name: 'Sports & Outdoors' } });
+  const toysGames = await categoryRepository.findOne({ where: { name: 'Toys & Games' } });
+  const healthBeauty = await categoryRepository.findOne({ where: { name: 'Health & Beauty' } });
+  const automotive = await categoryRepository.findOne({ where: { name: 'Automotive' } });
+  const foodBeverages = await categoryRepository.findOne({ where: { name: 'Food & Beverages' } });
+  const officeSupplies = await categoryRepository.findOne({ where: { name: 'Office Supplies' } });
+
   const products = [
     {
       name: 'iPhone 15 Pro',
       description: 'Latest Apple smartphone with Pro features',
       sku: 'IPHONE15PRO-001',
       barcode: '123456789001',
-      category: 'Electronics',
+      categoryId: electronics?.id || 1,
       price: 999.99,
       cost: 750.00,
       stock: 25,
@@ -28,7 +42,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Premium Android smartphone',
       sku: 'GALAXYS24-001',
       barcode: '123456789002',
-      category: 'Electronics',
+      categoryId: electronics?.id || 1,
       price: 899.99,
       cost: 650.00,
       stock: 30,
@@ -40,7 +54,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: '13-inch laptop with M3 chip',
       sku: 'MACBOOKAIR-M3-001',
       barcode: '123456789003',
-      category: 'Computers',
+      categoryId: electronics?.id || 1,
       price: 1299.99,
       cost: 950.00,
       stock: 15,
@@ -52,7 +66,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Wireless noise-cancelling headphones',
       sku: 'SONY-WH1000XM5-001',
       barcode: '123456789004',
-      category: 'Audio',
+      categoryId: electronics?.id || 1,
       price: 399.99,
       cost: 280.00,
       stock: 50,
@@ -64,7 +78,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Professional tablet with M2 chip',
       sku: 'IPADPRO-129-001',
       barcode: '123456789005',
-      category: 'Tablets',
+      categoryId: electronics?.id || 1,
       price: 1099.99,
       cost: 800.00,
       stock: 20,
@@ -76,7 +90,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Premium ultrabook laptop',
       sku: 'DELLXPS13-001',
       barcode: '123456789006',
-      category: 'Computers',
+      categoryId: electronics?.id || 1,
       price: 1199.99,
       cost: 850.00,
       stock: 12,
@@ -88,7 +102,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Advanced smartwatch with health monitoring',
       sku: 'APPLEWATCH9-001',
       barcode: '123456789007',
-      category: 'Wearables',
+      categoryId: electronics?.id || 1,
       price: 429.99,
       cost: 320.00,
       stock: 40,
@@ -100,7 +114,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Gaming console with OLED display',
       sku: 'SWITCH-OLED-001',
       barcode: '123456789008',
-      category: 'Gaming',
+      categoryId: toysGames?.id || 6,
       price: 349.99,
       cost: 250.00,
       stock: 35,
@@ -112,7 +126,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: 'Wireless earbuds with noise cancellation',
       sku: 'BOSE-QC-EARBUDS-001',
       barcode: '123456789009',
-      category: 'Audio',
+      categoryId: electronics?.id || 1,
       price: 279.99,
       cost: 200.00,
       stock: 60,
@@ -124,7 +138,7 @@ export async function seedProducts(dataSource: DataSource) {
       description: '27-inch 4K UHD monitor for professionals',
       sku: 'LG-27-4K-001',
       barcode: '123456789010',
-      category: 'Monitors',
+      categoryId: electronics?.id || 1,
       price: 499.99,
       cost: 350.00,
       stock: 18,

@@ -17,9 +17,9 @@ export class CreateProductDto {
   @IsOptional()
   barcode?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  category: string;
+  @IsNumber()
+  @IsOptional()
+  categoryId?: number;
 
   @IsNumber()
   @Min(0)

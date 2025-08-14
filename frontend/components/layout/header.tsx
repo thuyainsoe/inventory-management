@@ -134,15 +134,7 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user?.avatar} alt={user?.name || "User"} />
-                <AvatarFallback>
-                  {user?.name
-                    ? user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase()
-                    : "U"}
-                </AvatarFallback>
+                <AvatarFallback>{user?.name[0]}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
