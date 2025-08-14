@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { CategoryDto } from 'src/categories/dto/category.dto';
 
 export class ProductDto {
   @Expose()
@@ -17,7 +18,8 @@ export class ProductDto {
   barcode: string;
 
   @Expose()
-  category: string;
+  @Type(() => CategoryDto) // ✅ Tell Nest to serialize relation
+  category: CategoryDto;
 
   @Expose()
   price: number;

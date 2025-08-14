@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { Product } from './product.entity';
@@ -39,7 +43,9 @@ export class ProductsService {
     totalPages: number;
   }> {
     const offset = (page - 1) * limit;
-    const queryBuilder = this.productRepository.createQueryBuilder('product');
+    const queryBuilder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.category', 'category'); // ✅ load category data
 
     if (search) {
       queryBuilder.where(
@@ -56,10 +62,7 @@ export class ProductsService {
       }
     }
 
-    queryBuilder
-      .orderBy('product.updatedAt', 'DESC')
-      .skip(offset)
-      .take(limit);
+    queryBuilder.orderBy('product.updatedAt', 'DESC').skip(offset).take(limit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
@@ -80,7 +83,10 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     const product = await this.findOne(id);
 
     // Check if SKU is being updated and if it already exists
@@ -123,6 +129,6 @@ export class ProductsService {
       .select('DISTINCT product.category', 'category')
       .getRawMany();
 
-    return result.map(row => row.category);
+    return result.map((row) => row.category);
   }
 }

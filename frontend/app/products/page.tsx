@@ -110,9 +110,15 @@ export default function ProductsPage() {
     {
       accessorKey: "category",
       header: ({ column }) => createSortableHeader(column, "Category"),
-      cell: ({ row }) => (
-        <Badge variant="secondary">{row.getValue("category")}</Badge>
-      ),
+      cell: ({ row }) => {
+        // @ts-ignore
+        const value = row.getValue("category")?.name || "---";
+        return (
+          <div className="min-w-[150px]">
+            <Badge variant="secondary">{value}</Badge>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "price",

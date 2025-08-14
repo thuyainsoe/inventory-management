@@ -12,11 +12,11 @@ Content-Type: application/json
 
 
 ### find a particular user with given id
-POST http://localhost:3002/auth/signin
+POST http://localhost:3003/api/auth/signin
 Content-Type: application/json
 
 {
-    "email": "ryan1@gmail.com",
+    "email": "thuyainsoe@gmail.com",
     "password": "thuyainsoe"
 }
 
@@ -47,4 +47,4 @@ GET  http://localhost:3002/auth/colors/red
 GET  http://localhost:3002/auth/colors
 
 ### Get a color
-GET  http://localhost:3001/api/products
+GET  http://localhost:3003/api/products
