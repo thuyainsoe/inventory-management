@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Sidebar } from './sidebar'
-import { Header } from './header'
-import { cn } from '@/lib/utils'
+import { useState } from "react";
+import { Sidebar } from "./sidebar";
+import { Header } from "./header";
+import { cn } from "@/lib/utils";
 
 interface MainLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   user?: {
-    name: string
-    email: string
-    avatar?: string
-    role: string
-  }
+    name: string;
+    email: string;
+    avatar?: string;
+    role: string;
+  };
 }
 
 export function MainLayout({ children, user }: MainLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex h-screen bg-background">
@@ -40,17 +40,12 @@ export function MainLayout({ children, user }: MainLayoutProps) {
 
       {/* Main content area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Header
-          onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-          user={user}
-        />
-        
+        <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} user={user} />
+
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          <div className="mx-auto max-w-7xl">
-            {children}
-          </div>
+          <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>
     </div>
-  )
+  );
 }

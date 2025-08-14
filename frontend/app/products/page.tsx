@@ -9,7 +9,6 @@ import {
   createActionColumn,
 } from "@/components/tables/data-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -23,27 +22,24 @@ import {
   ColumnDef,
   PaginationState,
   SortingState,
+  RowSelectionState,
 } from "@tanstack/react-table";
 import { formatCurrency, getStockStatus } from "@/lib/utils";
 import { STOCK_STATUS_COLORS } from "@/lib/constants";
 import { useProducts, useDeleteProduct } from "@/hooks/use-products";
-
-// Mock user data
-const mockUser = {
-  name: "John Doe",
-  email: "john@example.com",
-  role: "Admin",
-  avatar: undefined,
-};
+import { PageHeader } from "@/components/ui/page-header";
+import ProtectedRoute from "@/components/auth/protected-route";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function ProductsPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
-  const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   // Use TanStack Query to fetch products
   const {
@@ -104,7 +100,7 @@ export default function ProductsPage() {
       accessorKey: "name",
       header: ({ column }) => createSortableHeader(column, "Name"),
       cell: ({ row }) => (
-        <div>
+        <div className="min-w-[200px]">
           <div className="font-medium">{row.getValue("name")}</div>
           <div className="text-sm text-muted-foreground">
             {row.original.sku}
@@ -133,7 +129,7 @@ export default function ProductsPage() {
         const status = getStockStatus(stock, minStock);
 
         return (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 min-w-[100px]">
             <span className="font-medium">{stock}</span>
             <Badge
               variant="secondary"
@@ -156,6 +152,34 @@ export default function ProductsPage() {
         </code>
       ),
     },
+    {
+      accessorKey: "description",
+      header: "Description",
+      cell: ({ row }) => (
+        <div className="max-w-[200px] truncate">
+          {row.original.description || "No description"}
+        </div>
+      ),
+    },
+    {
+      id: "supplier",
+      header: "Supplier",
+      cell: ({ row }) => <div className="min-w-[120px]">N/A</div>,
+    },
+    {
+      id: "location",
+      header: "Location",
+      cell: ({ row }) => <div className="min-w-[100px]">Warehouse A</div>,
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Last Updated",
+      cell: ({ row }) => (
+        <div className="min-w-[120px] text-sm text-muted-foreground">
+          {new Date(row.getValue("updatedAt")).toLocaleDateString()}
+        </div>
+      ),
+    },
     createActionColumn<Product>(handleEdit, handleDelete, handleView, [
       {
         label: "Duplicate",
@@ -169,23 +193,19 @@ export default function ProductsPage() {
   ];
 
   return (
-    <MainLayout user={mockUser}>
+    <ProtectedRoute>
+      <MainLayout user={user || undefined}>
       <div className="space-y-6">
         {/* Page Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight gradient-text">
-              Products
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Manage your product inventory
-            </p>
-          </div>
-          <Button onClick={handleAddProduct} className="gradient-primary-bg">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Product
-          </Button>
-        </div>
+        <PageHeader
+          title="Products"
+          description="Manage your product inventory"
+          action={{
+            label: "Add Product",
+            onClick: handleAddProduct,
+            icon: <Plus className="h-4 w-4" />,
+          }}
+        />
 
         {/* Stats Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -296,15 +316,19 @@ export default function ProductsPage() {
                   total: totalProducts,
                 }}
                 onPaginationChange={setPagination}
-                onSortingChange={setSorting}
+                onSortingChange={undefined}
                 onGlobalFilterChange={setGlobalFilter}
                 manualPagination={true}
                 manualSorting={true}
+                enableRowSelection={true}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
               />
             )}
           </CardContent>
         </Card>
       </div>
     </MainLayout>
+    </ProtectedRoute>
   );
 }

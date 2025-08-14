@@ -6,10 +6,11 @@ import { DataTable, createSortableHeader, createActionColumn } from '@/component
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, UserPlus, Download, Upload, Filter } from 'lucide-react'
+import { UserPlus, Download, Upload, Filter } from 'lucide-react'
 import type { User } from '@/types'
 import { ColumnDef } from '@tanstack/react-table'
 import { formatDate, formatDateTime } from '@/lib/utils'
+import { PageHeader } from '@/components/ui/page-header'
 
 // Mock user data
 const mockUser = {
@@ -351,28 +352,27 @@ export default function UsersPage() {
     <MainLayout user={mockUser}>
       <div className="space-y-6">
         {/* Page Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-            <p className="text-muted-foreground">
-              Manage user accounts, roles, and permissions
-            </p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" onClick={handleImport}>
-              <Upload className="mr-2 h-4 w-4" />
-              Import
-            </Button>
-            <Button variant="outline" onClick={handleExport}>
-              <Download className="mr-2 h-4 w-4" />
-              Export
-            </Button>
-            <Button onClick={handleAddUser}>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Add User
-            </Button>
-          </div>
-        </div>
+        <PageHeader
+          title="User Management"
+          description="Manage user accounts, roles, and permissions"
+          action={{
+            label: "Add User",
+            onClick: handleAddUser,
+            icon: <UserPlus className="h-4 w-4" />,
+          }}
+          additionalActions={
+            <>
+              <Button variant="outline" onClick={handleImport}>
+                <Upload className="mr-2 h-4 w-4" />
+                Import
+              </Button>
+              <Button variant="outline" onClick={handleExport}>
+                <Download className="mr-2 h-4 w-4" />
+                Export
+              </Button>
+            </>
+          }
+        />
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

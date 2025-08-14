@@ -8,6 +8,7 @@ class ApiClient {
     this.client = axios.create({
       baseURL: API_BASE_URL,
       timeout: 10000,
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -17,25 +18,15 @@ class ApiClient {
   }
 
   private setupInterceptors() {
-    // Request interceptor to add auth token
-    this.client.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem('auth_token')
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
-        }
-        return config
-      },
-      (error) => Promise.reject(error)
-    )
-
     // Response interceptor to handle auth errors
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          localStorage.removeItem('auth_token')
-          window.location.href = '/auth/login'
+          // Dispatch a custom event for unauthorized access
+          window.dispatchEvent(new CustomEvent('unauthorized', { 
+            detail: { status: 401 } 
+          }))
         }
         return Promise.reject(error)
       }

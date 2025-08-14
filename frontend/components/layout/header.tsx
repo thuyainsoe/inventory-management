@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/auth-context";
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -28,6 +29,7 @@ interface HeaderProps {
 export function Header({ onMenuToggle, user }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [notificationCount] = useState(3);
+  const { signOut } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,10 +37,8 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
     console.log("Searching for:", searchQuery);
   };
 
-  const handleLogout = () => {
-    // Implement logout logic here
-    localStorage.removeItem("auth_token");
-    window.location.href = "/auth/login";
+  const handleLogout = async () => {
+    await signOut();
   };
 
   return (

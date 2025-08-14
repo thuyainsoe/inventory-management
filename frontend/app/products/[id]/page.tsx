@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/layout/main-layout";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +23,11 @@ import {
 } from "lucide-react";
 import { formatCurrency, getStockStatus } from "@/lib/utils";
 import { STOCK_STATUS_COLORS } from "@/lib/constants";
-import { useProducts, useDeleteProduct } from "@/hooks/use-products";
+import {
+  useProducts,
+  useDeleteProduct,
+  useProduct,
+} from "@/hooks/use-products";
 
 const mockUser = {
   name: "John Doe",
@@ -42,10 +44,8 @@ interface ProductDetailPageProps {
 
 export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const router = useRouter();
-  const { data: productsData } = useProducts({ page: 1, limit: 1000 });
+  const { data: product } = useProduct(params.id);
   const deleteProductMutation = useDeleteProduct();
-
-  const product = productsData?.data.find((p) => p.id === params.id);
 
   const handleEdit = () => {
     console.log("Edit product:", product);
@@ -89,6 +89,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   }
 
   const stockStatus = getStockStatus(product.stock, product.minStock);
+
   const totalValue = product.price * product.stock;
 
   return (

@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   ChevronLeft,
   ChevronRight,
@@ -27,136 +27,141 @@ import {
   Bell,
   Upload,
   Database,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface NavItem {
-  title: string
-  href: string
-  icon: React.ElementType
-  badge?: string
-  children?: NavItem[]
+  title: string;
+  href: string;
+  icon?: React.ElementType;
+  badge?: string;
+  children?: NavItem[];
 }
 
 const navigationItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
+    title: "Dashboard",
+    href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
-    title: 'User Management',
-    href: '/users',
+    title: "User Management",
+    href: "/users",
     icon: Users,
     children: [
-      { title: 'All Users', href: '/users' },
-      { title: 'Roles & Permissions', href: '/users/roles' },
-      { title: 'Activity Logs', href: '/users/logs' },
+      { title: "All Users", href: "/users" },
+      { title: "Roles & Permissions", href: "/users/roles" },
+      { title: "Activity Logs", href: "/users/logs" },
     ],
   },
   {
-    title: 'Product Management',
-    href: '/products',
+    title: "Product Management",
+    href: "/products",
     icon: Package,
     children: [
-      { title: 'All Products', href: '/products' },
-      { title: 'Categories', href: '/products/categories' },
-      { title: 'Product Variants', href: '/products/variants' },
-      { title: 'Barcode Management', href: '/products/barcodes' },
+      { title: "All Products", href: "/products" },
+      { title: "Categories", href: "/products/categories" },
+      { title: "Product Variants", href: "/products/variants" },
+      { title: "Barcode Management", href: "/products/barcodes" },
     ],
   },
   {
-    title: 'Stock Management',
-    href: '/stock',
+    title: "Stock Management",
+    href: "/stock",
     icon: Boxes,
     children: [
-      { title: 'Current Stock', href: '/stock' },
-      { title: 'Stock Movements', href: '/stock/movements' },
-      { title: 'Stock Adjustments', href: '/stock/adjustments' },
-      { title: 'Stock Transfers', href: '/stock/transfers' },
-      { title: 'Low Stock Alerts', href: '/stock/alerts' },
+      { title: "Current Stock", href: "/stock" },
+      { title: "Stock Movements", href: "/stock/movements" },
+      { title: "Stock Adjustments", href: "/stock/adjustments" },
+      { title: "Stock Transfers", href: "/stock/transfers" },
+      { title: "Low Stock Alerts", href: "/stock/alerts" },
     ],
   },
   {
-    title: 'Suppliers',
-    href: '/suppliers',
+    title: "Suppliers",
+    href: "/suppliers",
     icon: Building2,
     children: [
-      { title: 'All Suppliers', href: '/suppliers' },
-      { title: 'Performance Reports', href: '/suppliers/performance' },
-      { title: 'Payment Terms', href: '/suppliers/payments' },
+      { title: "All Suppliers", href: "/suppliers" },
+      { title: "Performance Reports", href: "/suppliers/performance" },
+      { title: "Payment Terms", href: "/suppliers/payments" },
     ],
   },
   {
-    title: 'Purchase Orders',
-    href: '/orders/purchase',
+    title: "Purchase Orders",
+    href: "/orders/purchase",
     icon: ShoppingCart,
     children: [
-      { title: 'All Orders', href: '/orders/purchase' },
-      { title: 'Pending Approval', href: '/orders/purchase/pending' },
-      { title: 'Receiving', href: '/orders/purchase/receiving' },
-      { title: 'Order History', href: '/orders/purchase/history' },
+      { title: "All Orders", href: "/orders/purchase" },
+      { title: "Pending Approval", href: "/orders/purchase/pending" },
+      { title: "Receiving", href: "/orders/purchase/receiving" },
+      { title: "Order History", href: "/orders/purchase/history" },
     ],
   },
   {
-    title: 'Sales Orders',
-    href: '/sales',
+    title: "Sales Orders",
+    href: "/sales",
     icon: TrendingUp,
     children: [
-      { title: 'All Sales', href: '/sales' },
-      { title: 'Customer Management', href: '/sales/customers' },
-      { title: 'Invoices', href: '/sales/invoices' },
-      { title: 'Returns & Refunds', href: '/sales/returns' },
+      { title: "All Sales", href: "/sales" },
+      { title: "Customer Management", href: "/sales/customers" },
+      { title: "Invoices", href: "/sales/invoices" },
+      { title: "Returns & Refunds", href: "/sales/returns" },
     ],
   },
   {
-    title: 'Reports',
-    href: '/reports',
+    title: "Reports",
+    href: "/reports",
     icon: BarChart3,
     children: [
-      { title: 'Inventory Reports', href: '/reports/inventory' },
-      { title: 'Sales Reports', href: '/reports/sales' },
-      { title: 'Purchase Reports', href: '/reports/purchases' },
-      { title: 'Financial Reports', href: '/reports/financial' },
+      { title: "Inventory Reports", href: "/reports/inventory" },
+      { title: "Sales Reports", href: "/reports/sales" },
+      { title: "Purchase Reports", href: "/reports/purchases" },
+      { title: "Financial Reports", href: "/reports/financial" },
     ],
   },
   {
-    title: 'Settings',
-    href: '/settings',
+    title: "Settings",
+    href: "/settings",
     icon: Settings,
     children: [
-      { title: 'General Settings', href: '/settings/general' },
-      { title: 'Company Profile', href: '/settings/company' },
-      { title: 'System Configuration', href: '/settings/system' },
-      { title: 'Backup & Restore', href: '/settings/backup' },
+      { title: "General Settings", href: "/settings/general" },
+      { title: "Company Profile", href: "/settings/company" },
+      { title: "System Configuration", href: "/settings/system" },
+      { title: "Backup & Restore", href: "/settings/backup" },
     ],
   },
-]
+];
 
 interface SidebarProps {
-  className?: string
+  className?: string;
 }
 
 export function Sidebar({ className }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null)
-  const pathname = usePathname()
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const pathname = usePathname();
 
   const toggleSubmenu = (href: string) => {
-    setOpenSubmenu(openSubmenu === href ? null : href)
-  }
+    setOpenSubmenu(openSubmenu === href ? null : href);
+  };
 
   const isActive = (href: string) => {
-    return pathname === href || pathname.startsWith(href + '/')
-  }
+    return pathname === href || pathname.startsWith(href + "/");
+  };
 
   return (
     <TooltipProvider>
       <div
         className={cn(
-          'flex h-full flex-col border-r bg-background transition-all duration-300',
-          isCollapsed ? 'w-16' : 'w-64',
+          "flex h-full flex-col border-r bg-background transition-all duration-300",
+          isCollapsed ? "w-16" : "w-64",
           className
         )}
       >
@@ -171,23 +176,32 @@ export function Sidebar({ className }: SidebarProps) {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="h-8 w-8 p-0"
           >
-            {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            {isCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
           </Button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 p-2">
+        <nav className="flex-1 space-y-1.5 p-3">
           {navigationItems.map((item) => (
             <div key={item.href}>
               {isCollapsed ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link href={item.children ? '#' : item.href}>
+                    <Link href={item.children ? "#" : item.href}>
                       <Button
-                        variant={isActive(item.href) ? 'secondary' : 'ghost'}
+                        variant={isActive(item.href) ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-full justify-center px-2"
-                        onClick={() => item.children && toggleSubmenu(item.href)}
+                        className={cn(
+                          "h-9 w-full justify-center px-2 rounded-lg transition-colors",
+                          !isActive(item.href) && "hover:bg-muted"
+                        )}
+                        onClick={() =>
+                          item.children && toggleSubmenu(item.href)
+                        }
                       >
                         <item.icon className="h-4 w-4" />
                         {item.badge && (
@@ -204,11 +218,14 @@ export function Sidebar({ className }: SidebarProps) {
                 </Tooltip>
               ) : (
                 <>
-                  <Link href={item.children ? '#' : item.href}>
+                  <Link href={item.children ? "#" : item.href}>
                     <Button
-                      variant={isActive(item.href) ? 'secondary' : 'ghost'}
+                      variant={isActive(item.href) ? "secondary" : "ghost"}
                       size="sm"
-                      className="h-9 w-full justify-start px-2"
+                      className={cn(
+                        "h-9 w-full justify-start px-2 rounded-lg transition-colors",
+                        !isActive(item.href) && "hover:bg-muted"
+                      )}
                       onClick={() => item.children && toggleSubmenu(item.href)}
                     >
                       <item.icon className="mr-2 h-4 w-4" />
@@ -221,23 +238,28 @@ export function Sidebar({ className }: SidebarProps) {
                       {item.children && (
                         <ChevronRight
                           className={cn(
-                            'ml-2 h-4 w-4 transition-transform',
-                            openSubmenu === item.href && 'rotate-90'
+                            "ml-2 h-4 w-4 transition-transform",
+                            openSubmenu === item.href && "rotate-90"
                           )}
                         />
                       )}
                     </Button>
                   </Link>
-                  
+
                   {/* Submenu */}
                   {item.children && openSubmenu === item.href && (
-                    <div className="ml-4 mt-1 space-y-1">
+                    <div className="ml-3 mt-1 space-y-1 border-l border-border pl-3">
                       {item.children.map((child) => (
                         <Link key={child.href} href={child.href}>
                           <Button
-                            variant={isActive(child.href) ? 'secondary' : 'ghost'}
+                            variant={
+                              isActive(child.href) ? "secondary" : "ghost"
+                            }
                             size="sm"
-                            className="h-8 w-full justify-start px-2 text-sm"
+                            className={cn(
+                              "h-8 w-full justify-start px-2 text-sm rounded-md transition-colors",
+                              !isActive(child.href) && "hover:bg-accent"
+                            )}
                           >
                             {child.title}
                           </Button>
@@ -252,5 +274,5 @@ export function Sidebar({ className }: SidebarProps) {
         </nav>
       </div>
     </TooltipProvider>
-  )
+  );
 }

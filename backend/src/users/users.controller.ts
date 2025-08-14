@@ -13,7 +13,7 @@ import {
   UseGuards,
   Session,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, SignInDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
@@ -61,13 +61,13 @@ export class UsersController {
 
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signup(body.email, body.password);
+    const user = await this.authService.signup(body.email, body.password, body.name, body.role, body.avatar);
     session.userId = user.id;
     return user;
   }
 
   @Post('/signin')
-  async signIn(@Body() body: CreateUserDto, @Session() session: any) {
+  async signIn(@Body() body: SignInDto, @Session() session: any) {
     const user = await this.authService.signin(body.email, body.password);
     session.userId = user.id;
     return user;
