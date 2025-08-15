@@ -14,6 +14,8 @@ import { Brand } from './brands/brand.entity';
 import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
 import { PurchaseOrder } from './purchase-orders/purchase-order.entity';
 import { PurchaseOrderItem } from './purchase-orders/purchase-order-item.entity';
+import { Unit } from './units/unit.entity';
+import { UnitsModule } from './units/units.module';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { PurchaseOrderItem } from './purchase-orders/purchase-order-item.entity'
         Brand,
         PurchaseOrder,
         PurchaseOrderItem,
+        Unit,
       ],
       synchronize: true,
     }),
@@ -36,6 +39,7 @@ import { PurchaseOrderItem } from './purchase-orders/purchase-order-item.entity'
     CategoriesModule,
     BrandsModule,
     PurchaseOrdersModule,
+    UnitsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

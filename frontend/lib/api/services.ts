@@ -12,6 +12,7 @@ import type {
   PaginatedResponse,
   ApiResponse,
   Brand,
+  Unit,
 } from "../../types";
 
 // Auth Services
@@ -290,4 +291,37 @@ export const dashboardService = {
     apiClient.get<ApiResponse<any>>(`${API_ENDPOINTS.REPORTS}/${type}`, {
       params,
     }),
+};
+
+// Unit Services
+export const unitService = {
+  getUnits: (params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: string;
+  }) =>
+    apiClient.get<PaginatedResponse<Unit>>(API_ENDPOINTS.UNITS, {
+      params,
+    }),
+
+  getAllUnits: () => apiClient.get<Unit[]>(`${API_ENDPOINTS.UNITS}/all`),
+
+  getUnit: (id: number) => apiClient.get<Unit>(`${API_ENDPOINTS.UNITS}/${id}`),
+
+  createUnit: (unitData: Partial<Unit>) =>
+    apiClient.post<Unit>(API_ENDPOINTS.UNITS, unitData),
+
+  updateUnit: (id: number, unitData: Partial<Unit>) =>
+    apiClient.patch<Unit>(`${API_ENDPOINTS.UNITS}/${id}`, unitData),
+
+  deleteUnit: (id: number) =>
+    apiClient.delete<void>(`${API_ENDPOINTS.UNITS}/${id}`),
+
+  getStats: () =>
+    apiClient.get<{
+      total: number;
+      active: number;
+      inactive: number;
+    }>(`${API_ENDPOINTS.UNITS}/stats`),
 };

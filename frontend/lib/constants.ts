@@ -48,6 +48,7 @@ export const API_ENDPOINTS = {
   STOCK_MOVEMENTS: "/stock-movements",
   DASHBOARD: "/dashboard",
   REPORTS: "/reports",
+  UNITS: "/units" as const,
 } as const;
 
 export const PAGINATION_SIZES = [10, 20, 50, 100] as const;

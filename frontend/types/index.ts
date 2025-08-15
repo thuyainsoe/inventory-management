@@ -74,7 +74,13 @@ export interface PurchaseOrder {
   poDate: string;
   supplierId?: number;
   deliveryDate?: string;
-  status: "draft" | "pending" | "approved" | "ordered" | "received" | "cancelled";
+  status:
+    | "draft"
+    | "pending"
+    | "approved"
+    | "ordered"
+    | "received"
+    | "cancelled";
   paymentTerms?: string;
   paymentMethod?: string;
   totalAmount: number;
@@ -175,4 +181,16 @@ export interface PaginatedResponse<T> {
   totalPages: number;
   page: number;
   limit: number;
+}
+
+export interface Unit {
+  id: number;
+  code: string; // e.g., PCS, KG
+  name: string; // e.g., Pieces, Kilogram
+  description?: string;
+  symbol?: string; // e.g., pc, kg, m
+  conversionFactor?: number; // e.g., 1
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
