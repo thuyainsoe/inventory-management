@@ -24,7 +24,6 @@ export function CreateUnitDrawer({ isOpen, onClose }: CreateUnitDrawerProps) {
   const methods = useForm<UnitFormValues>({
     resolver: zodResolver(UnitFormSchema),
     defaultValues: {
-      code: "",
       name: "",
       description: "",
       symbol: "",

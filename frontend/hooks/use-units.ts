@@ -10,7 +10,6 @@ export interface UseUnitsParams {
 }
 
 export interface CreateUnitData {
-  code: string;
   name: string;
   description?: string;
   symbol?: string;

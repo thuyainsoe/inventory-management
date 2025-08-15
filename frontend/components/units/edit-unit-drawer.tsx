@@ -25,7 +25,6 @@ export function EditUnitDrawer({ isOpen, onClose, unit }: EditUnitDrawerProps) {
   const methods = useForm<UnitFormValues>({
     resolver: zodResolver(UnitFormSchema),
     defaultValues: {
-      code: "",
       name: "",
       description: "",
       symbol: "",
@@ -45,7 +44,6 @@ export function EditUnitDrawer({ isOpen, onClose, unit }: EditUnitDrawerProps) {
   // Update form values when unit changes
   useEffect(() => {
     if (unit && isOpen) {
-      setValue("code", unit.code);
       setValue("name", unit.name);
       setValue("description", unit.description || "");
       setValue("symbol", unit.symbol || "");
