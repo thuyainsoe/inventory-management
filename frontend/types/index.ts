@@ -70,10 +70,22 @@ export interface Supplier {
 
 export interface PurchaseOrder {
   id: string;
-  orderNumber: string;
-  supplierId: string;
-  status: "draft" | "pending" | "approved" | "received" | "cancelled";
+  poNumber: string;
+  poDate: string;
+  supplierId?: number;
+  deliveryDate?: string;
+  status: "draft" | "pending" | "approved" | "ordered" | "received" | "cancelled";
+  paymentTerms?: string;
+  paymentMethod?: string;
   totalAmount: number;
+  paidAmount: number;
+  notes?: string;
+  createdBy?: number;
+  creator?: {
+    id: number;
+    name: string;
+    email: string;
+  };
   items: PurchaseOrderItem[];
   createdAt: string;
   updatedAt: string;
@@ -81,10 +93,18 @@ export interface PurchaseOrder {
 
 export interface PurchaseOrderItem {
   id: string;
+  purchaseOrderId: string;
   productId: string;
   quantity: number;
   unitPrice: number;
-  totalPrice: number;
+  discount: number;
+  tax: number;
+  lineTotal: number;
+  product?: {
+    id: string;
+    name: string;
+    sku: string;
+  };
 }
 
 export interface SalesOrder {

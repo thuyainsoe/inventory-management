@@ -60,6 +60,7 @@ interface DataTableProps<TData, TValue> {
   enableRowSelection?: boolean;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   rowSelection?: RowSelectionState;
+  customControls?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -78,6 +79,7 @@ export function DataTable<TData, TValue>({
   enableRowSelection = false,
   onRowSelectionChange,
   rowSelection: externalRowSelection,
+  customControls,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -187,6 +189,12 @@ export function DataTable<TData, TValue>({
               className="max-w-sm pl-8"
             />
           </div>
+          {/* Custom Controls */}
+          {customControls && (
+            <div className="flex items-center space-x-2">
+              {customControls}
+            </div>
+          )}
         </div>
 
         {/* Column Visibility Toggle */}

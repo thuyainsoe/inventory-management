@@ -28,7 +28,7 @@ export const STOCK_STATUS_COLORS = {
 
 // These will connect to your NestJS backend
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3003/api";
 
 export const API_ENDPOINTS = {
   AUTH: {

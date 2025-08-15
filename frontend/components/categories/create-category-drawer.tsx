@@ -7,11 +7,11 @@ import { EntityDrawer } from "@/components/ui/entity-drawer";
 import { FolderPlus } from "lucide-react";
 import { useCreateCategory } from "@/hooks/use-categories";
 import { FormFieldGenerator } from "@/components/form/form-field-generator";
-import { CategoryFormFieldsSchema } from "@/schemas/category-form-field-schema";
+import { CategoryFormFieldsSchema } from "@/schemas/categories/category-form-field-schema";
 import {
   CategoryFormSchema,
   CategoryFormValues,
-} from "@/schemas/category-form-schema";
+} from "@/schemas/categories/category-form-schema";
 
 interface CreateCategoryDrawerProps {
   isOpen: boolean;

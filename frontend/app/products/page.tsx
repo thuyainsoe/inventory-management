@@ -26,6 +26,14 @@ import {
 } from "@tanstack/react-table";
 import { formatCurrency, getStockStatus } from "@/lib/utils";
 import { STOCK_STATUS_COLORS } from "@/lib/constants";
+import { 
+  TextCell, 
+  BadgeCell, 
+  CurrencyCell, 
+  CodeCell, 
+  DateCell,
+  ActionCell 
+} from "@/components/tables/cells";
 import { useProducts, useDeleteProduct } from "@/hooks/use-products";
 import { PageHeader } from "@/components/ui/page-header";
 import ProtectedRoute from "@/components/auth/protected-route";
@@ -99,12 +107,11 @@ export default function ProductsPage() {
       accessorKey: "name",
       header: ({ column }) => createSortableHeader(column, "Name"),
       cell: ({ row }) => (
-        <div className="min-w-[200px]">
-          <div className="font-medium">{row.getValue("name")}</div>
-          <div className="text-sm text-muted-foreground">
-            {row.original.sku}
-          </div>
-        </div>
+        <TextCell
+          value={row.getValue("name") as string}
+          subtitle={row.original.sku}
+          className="min-w-[200px]"
+        />
       ),
     },
     {
@@ -112,18 +119,37 @@ export default function ProductsPage() {
       header: ({ column }) => createSortableHeader(column, "Category"),
       cell: ({ row }) => {
         // @ts-ignore
-        const value = row.getValue("category")?.name || "---";
+        const value = row.getValue("category")?.name;
         return (
-          <div className="min-w-[150px]">
-            <Badge variant="secondary">{value}</Badge>
-          </div>
+          <BadgeCell
+            value={value}
+            className="min-w-[150px]"
+            fallback="---"
+          />
+        );
+      },
+    },
+    {
+      accessorKey: "brand",
+      header: ({ column }) => createSortableHeader(column, "Brand"),
+      cell: ({ row }) => {
+        // @ts-ignore
+        const value = row.getValue("brand")?.name;
+        return (
+          <BadgeCell
+            value={value}
+            className="min-w-[150px]"
+            fallback="---"
+          />
         );
       },
     },
     {
       accessorKey: "price",
       header: ({ column }) => createSortableHeader(column, "Price"),
-      cell: ({ row }) => formatCurrency(row.getValue("price")),
+      cell: ({ row }) => (
+        <CurrencyCell value={row.getValue("price") as number} />
+      ),
     },
     {
       accessorKey: "stock",
@@ -152,20 +178,22 @@ export default function ProductsPage() {
       accessorKey: "barcode",
       header: "Barcode",
       cell: ({ row }) => (
-        <div className="min-w-[150px]">
-          <code className="text-sm bg-muted px-2 py-1 rounded min-w-[120px]">
-            {row.getValue("barcode")}
-          </code>
-        </div>
+        <CodeCell 
+          value={row.getValue("barcode") as string}
+          copyable={true}
+        />
       ),
     },
     {
       accessorKey: "description",
       header: "Description",
       cell: ({ row }) => (
-        <div className="max-w-[200px] truncate">
-          {row.original.description || "No description"}
-        </div>
+        <TextCell 
+          value={row.original.description}
+          className="max-w-[200px]"
+          truncate={true}
+          fallback="No description"
+        />
       ),
     },
     {
@@ -182,21 +210,47 @@ export default function ProductsPage() {
       accessorKey: "updatedAt",
       header: "Last Updated",
       cell: ({ row }) => (
-        <div className="min-w-[120px] text-sm text-muted-foreground">
-          {new Date(row.getValue("updatedAt")).toLocaleDateString()}
-        </div>
+        <DateCell 
+          value={row.getValue("updatedAt") as string}
+          className="min-w-[120px] text-sm text-muted-foreground"
+        />
       ),
     },
-    createActionColumn<Product>(handleEdit, handleDelete, handleView, [
-      {
-        label: "Duplicate",
-        onClick: (product) => console.log("Duplicate:", product),
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const product = row.original;
+        return (
+          <ActionCell
+            actions={[
+              {
+                label: "View",
+                onClick: () => handleView(product),
+              },
+              {
+                label: "Edit",
+                onClick: () => handleEdit(product),
+              },
+              {
+                label: "Duplicate",
+                onClick: () => console.log("Duplicate:", product),
+              },
+              {
+                label: "Generate Barcode",
+                onClick: () => console.log("Generate barcode:", product),
+              },
+              {
+                label: "Delete",
+                onClick: () => handleDelete(product),
+                variant: "destructive",
+                separator: true,
+              },
+            ]}
+          />
+        );
       },
-      {
-        label: "Generate Barcode",
-        onClick: (product) => console.log("Generate barcode:", product),
-      },
-    ]),
+    },
   ];
 
   return (

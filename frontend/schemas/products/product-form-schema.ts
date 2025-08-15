@@ -18,7 +18,10 @@ export const ProductFormSchema = z.object({
     .min(1, "SKU is required")
     .min(3, "SKU must be at least 3 characters")
     .max(50, "SKU must not exceed 50 characters")
-    .regex(/^[A-Z0-9-_]+$/i, "SKU can only contain letters, numbers, hyphens, and underscores"),
+    .regex(
+      /^[A-Z0-9-_]+$/i,
+      "SKU can only contain letters, numbers, hyphens, and underscores"
+    ),
 
   barcode: z
     .string()
@@ -34,6 +37,17 @@ export const ProductFormSchema = z.object({
     .transform((val) => parseInt(val, 10))
     .refine((val) => !isNaN(val), {
       message: "Category must be a valid number",
+    })
+    .optional(),
+
+  brandId: z
+    .string({
+      required_error: "Brand is required",
+    })
+    .min(1, "Brand is required")
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val), {
+      message: "Brand must be a valid number",
     })
     .optional(),
 
@@ -75,10 +89,7 @@ export const ProductFormSchema = z.object({
     .int("Minimum stock must be a whole number")
     .min(0, "Minimum stock cannot be negative"),
 
-  images: z
-    .array(z.string().url("Invalid image URL"))
-    .optional()
-    .default([]),
+  images: z.array(z.string().url("Invalid image URL")).optional().default([]),
 });
 
 export type ProductFormValues = z.infer<typeof ProductFormSchema>;

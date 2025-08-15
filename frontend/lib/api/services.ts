@@ -194,6 +194,7 @@ export const purchaseOrderService = {
   getPurchaseOrders: (params?: {
     page?: number;
     limit?: number;
+    search?: string;
     status?: string;
   }) =>
     apiClient.get<PaginatedResponse<PurchaseOrder>>(
@@ -202,25 +203,29 @@ export const purchaseOrderService = {
     ),
 
   getPurchaseOrder: (id: string) =>
-    apiClient.get<ApiResponse<PurchaseOrder>>(
-      `${API_ENDPOINTS.PURCHASE_ORDERS}/${id}`
-    ),
+    apiClient.get<PurchaseOrder>(`${API_ENDPOINTS.PURCHASE_ORDERS}/${id}`),
 
-  createPurchaseOrder: (orderData: Partial<PurchaseOrder>) =>
-    apiClient.post<ApiResponse<PurchaseOrder>>(
-      API_ENDPOINTS.PURCHASE_ORDERS,
-      orderData
-    ),
+  createPurchaseOrder: (orderData: any) =>
+    apiClient.post<PurchaseOrder>(API_ENDPOINTS.PURCHASE_ORDERS, orderData),
 
-  updatePurchaseOrder: (id: string, orderData: Partial<PurchaseOrder>) =>
-    apiClient.put<ApiResponse<PurchaseOrder>>(
+  updatePurchaseOrder: (id: string, orderData: any) =>
+    apiClient.patch<PurchaseOrder>(
       `${API_ENDPOINTS.PURCHASE_ORDERS}/${id}`,
       orderData
     ),
 
   deletePurchaseOrder: (id: string) =>
-    apiClient.delete<ApiResponse<null>>(
-      `${API_ENDPOINTS.PURCHASE_ORDERS}/${id}`
+    apiClient.delete<void>(`${API_ENDPOINTS.PURCHASE_ORDERS}/${id}`),
+
+  updatePurchaseOrderStatus: (id: string, status: string) =>
+    apiClient.patch<PurchaseOrder>(
+      `${API_ENDPOINTS.PURCHASE_ORDERS}/${id}/status`,
+      { status }
+    ),
+
+  getPurchaseOrdersByStatus: (status: string) =>
+    apiClient.get<PurchaseOrder[]>(
+      `${API_ENDPOINTS.PURCHASE_ORDERS}/status/${status}`
     ),
 };
 

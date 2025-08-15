@@ -9,17 +9,25 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Product } from './products/product.entity';
 import { Category } from './categories/category.entity';
-import { BrandsService } from './brands/brands.service';
-import { BrandsController } from './brands/brands.controller';
 import { BrandsModule } from './brands/brands.module';
 import { Brand } from './brands/brand.entity';
+import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
+import { PurchaseOrder } from './purchase-orders/purchase-order.entity';
+import { PurchaseOrderItem } from './purchase-orders/purchase-order-item.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [User, Product, Category, Brand],
+      entities: [
+        User,
+        Product,
+        Category,
+        Brand,
+        PurchaseOrder,
+        PurchaseOrderItem,
+      ],
       synchronize: true,
     }),
     UsersModule,
@@ -27,6 +35,7 @@ import { Brand } from './brands/brand.entity';
     ProductsModule,
     CategoriesModule,
     BrandsModule,
+    PurchaseOrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

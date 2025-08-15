@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -100,7 +100,7 @@ const navigationItems: NavItem[] = [
     href: "/orders/purchase",
     icon: ShoppingCart,
     children: [
-      { title: "All Orders", href: "/orders/purchase" },
+      { title: "All Orders", href: "/purchase-orders" },
       { title: "Pending Approval", href: "/orders/purchase/pending" },
       { title: "Receiving", href: "/orders/purchase/receiving" },
       { title: "Order History", href: "/orders/purchase/history" },
@@ -205,7 +205,7 @@ export function Sidebar({ className }: SidebarProps) {
                           item.children && toggleSubmenu(item.href)
                         }
                       >
-                        <item.icon className="h-5 w-5" />
+                        {item.icon && React.createElement(item.icon, { className: "h-5 w-5" })}
                         {item.badge && (
                           <span className="ml-1 rounded-full bg-red-500 px-1 text-xs text-white">
                             {item.badge}
@@ -230,7 +230,7 @@ export function Sidebar({ className }: SidebarProps) {
                       )}
                       onClick={() => item.children && toggleSubmenu(item.href)}
                     >
-                      <item.icon className="mr-2 h-5 w-5" />
+                      {item.icon && React.createElement(item.icon, { className: "mr-2 h-5 w-5" })}
                       <span className="flex-1 text-left">{item.title}</span>
                       {item.badge && (
                         <span className="ml-2 rounded-full bg-red-500 px-2 py-0.5 text-xs text-white">

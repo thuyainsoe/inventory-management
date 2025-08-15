@@ -7,8 +7,8 @@ import { EntityDrawer } from "@/components/ui/entity-drawer";
 import { UserPlus } from "lucide-react";
 import { useCreateUser } from "@/hooks/use-users";
 import { FormFieldGenerator } from "@/components/form/form-field-generator";
-import { UserFormFieldsSchema } from "@/schemas/user-form-field-schema";
-import { UserFormSchema, UserFormValues } from "@/schemas/user-form-schema";
+import { UserFormFieldsSchema } from "@/schemas/users/user-form-field-schema";
+import { UserFormSchema, UserFormValues } from "@/schemas/users/user-form-schema";
 
 interface CreateUserDrawerProps {
   isOpen: boolean;

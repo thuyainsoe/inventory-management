@@ -5,8 +5,10 @@ import type {
 
 export const ProductFormFieldsSchema = ({
   categoryOptions,
+  brandOptions,
 }: {
   categoryOptions: SelectOption[];
+  brandOptions: SelectOption[];
 }): FormSchema => {
   const fields = [
     // Basic Information Section
@@ -65,7 +67,7 @@ export const ProductFormFieldsSchema = ({
           label: "Brand",
           placeholder: "Select brand",
           required: true,
-          options: categoryOptions,
+          options: brandOptions,
         },
         {
           id: 6,

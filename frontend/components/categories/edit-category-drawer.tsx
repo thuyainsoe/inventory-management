@@ -7,11 +7,11 @@ import { EntityDrawer } from "@/components/ui/entity-drawer";
 import { Edit } from "lucide-react";
 import { useUpdateCategory, type Category } from "@/hooks/use-categories";
 import { FormFieldGenerator } from "@/components/form/form-field-generator";
-import { CategoryFormFieldsSchema } from "@/schemas/category-form-field-schema";
+import { CategoryFormFieldsSchema } from "@/schemas/categories/category-form-field-schema";
 import {
   CategoryFormSchema,
   CategoryFormValues,
-} from "@/schemas/category-form-schema";
+} from "@/schemas/categories/category-form-schema";
 
 interface EditCategoryDrawerProps {
   isOpen: boolean;

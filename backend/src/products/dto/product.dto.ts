@@ -1,4 +1,5 @@
 import { Expose, Type } from 'class-transformer';
+import { BrandDto } from 'src/brands/dto/brand.dto';
 import { CategoryDto } from 'src/categories/dto/category.dto';
 
 export class ProductDto {
@@ -20,6 +21,10 @@ export class ProductDto {
   @Expose()
   @Type(() => CategoryDto) // ✅ Tell Nest to serialize relation
   category: CategoryDto;
+
+  @Expose()
+  @Type(() => BrandDto) // ✅ Tell Nest to serialize relation
+  brand: BrandDto;
 
   @Expose()
   price: number;

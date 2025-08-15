@@ -13,14 +13,20 @@ import { useAuth } from "@/contexts/auth-context";
 import { useCreateProduct } from "@/hooks/use-products";
 import { useAllCategories } from "@/hooks/use-categories";
 import { FormFieldGenerator } from "@/components/form/form-field-generator";
-import { ProductFormFieldsSchema } from "@/schemas/product-form-field-schema";
-import { ProductFormSchema, ProductFormValues } from "@/schemas/product-form-schema";
+import { ProductFormFieldsSchema } from "@/schemas/products/product-form-field-schema";
+import {
+  ProductFormSchema,
+  ProductFormValues,
+} from "@/schemas/products/product-form-schema";
+import { useAllBrands } from "@/hooks/use-brands";
 
 export default function CreateProductPage() {
   const router = useRouter();
   const { user: currentUser } = useAuth();
   const createProductMutation = useCreateProduct();
-  const { data: categoriesData, isLoading: categoriesLoading } = useAllCategories();
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useAllCategories();
+  const { data: brandsData, isLoading: brandsDataLoading } = useAllBrands();
 
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
@@ -38,9 +44,14 @@ export default function CreateProductPage() {
     },
   });
 
-  const { handleSubmit, formState: { isSubmitting }, reset } = methods;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+  } = methods;
 
   const onSubmit = async (data: ProductFormValues) => {
+    console.log(data, "data");
     try {
       await createProductMutation.mutateAsync(data);
       router.push("/products");
@@ -56,17 +67,26 @@ export default function CreateProductPage() {
   // Convert categories data to options format
   const categoryOptions = useMemo(() => {
     if (!categoriesData) return [];
-    return categoriesData.map(category => ({
+    return categoriesData.map((category) => ({
       label: category.name,
       value: category.id.toString(),
     }));
   }, [categoriesData]);
 
+  const brandOptions = useMemo(() => {
+    if (!brandsData) return [];
+    return brandsData.map((brand) => ({
+      label: brand.name,
+      value: brand.id.toString(),
+    }));
+  }, [brandsData]);
+
   const formSchema = useMemo(() => {
     return ProductFormFieldsSchema({
       categoryOptions,
+      brandOptions,
     });
-  }, [categoryOptions]);
+  }, [categoryOptions, brandOptions]);
 
   return (
     <ProtectedRoute>
@@ -92,34 +112,38 @@ export default function CreateProductPage() {
                 <div className="flex items-center justify-center py-8">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                    <p className="mt-2 text-sm text-muted-foreground">Loading categories...</p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Loading categories...
+                    </p>
                   </div>
                 </div>
               ) : (
                 <FormProvider {...methods}>
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <FormFieldGenerator formSchema={formSchema} />
-                  
-                  <div className="flex gap-4 pt-6">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => reset()}
-                      className="flex-1"
-                    >
-                      Reset Form
-                    </Button>
-                    <Button
-                      type="submit"
-                      className="flex-1"
-                      disabled={isSubmitting || createProductMutation.isPending}
-                    >
-                      <Save className="mr-2 h-4 w-4" />
-                      {isSubmitting || createProductMutation.isPending
-                        ? "Creating..."
-                        : "Create Product"}
-                    </Button>
-                  </div>
+
+                    <div className="flex gap-4 pt-6">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => reset()}
+                        className="flex-1"
+                      >
+                        Reset Form
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="flex-1"
+                        disabled={
+                          isSubmitting || createProductMutation.isPending
+                        }
+                      >
+                        <Save className="mr-2 h-4 w-4" />
+                        {isSubmitting || createProductMutation.isPending
+                          ? "Creating..."
+                          : "Create Product"}
+                      </Button>
+                    </div>
                   </form>
                 </FormProvider>
               )}

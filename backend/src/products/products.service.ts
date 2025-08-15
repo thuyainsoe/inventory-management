@@ -45,7 +45,8 @@ export class ProductsService {
     const offset = (page - 1) * limit;
     const queryBuilder = this.productRepository
       .createQueryBuilder('product')
-      .leftJoinAndSelect('product.category', 'category'); // ✅ load category data
+      .leftJoinAndSelect('product.category', 'category') // load category
+      .leftJoinAndSelect('product.brand', 'brand'); // load brand
 
     if (search) {
       queryBuilder.where(

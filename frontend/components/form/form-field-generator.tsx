@@ -49,7 +49,7 @@ type BaseField = {
 };
 
 export type InputField = BaseField & {
-  type: "text" | "password" | "email" | "number" | "url";
+  type: "text" | "password" | "email" | "number" | "url" | "date";
   min?: number;
   max?: number;
   step?: number;
@@ -186,6 +186,7 @@ export const FormFieldGenerator = React.memo(({ formSchema }: Props) => {
       case "email":
       case "number":
       case "url":
+      case "date":
         return (
           <div key={field.id} className={`space-y-2 ${containerClass}`}>
             <Label htmlFor={field.name} className="text-sm font-medium">
