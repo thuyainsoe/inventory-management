@@ -1,7 +1,7 @@
 import type {
   SelectOption,
   FormSchema,
-} from "@/components/form/form-field-generator";
+} from "@/components/form/fields/types";
 
 export const ProductFormFieldsSchema = ({
   categoryOptions,
