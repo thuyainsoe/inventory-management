@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { X, Hash } from "lucide-react";
@@ -56,6 +57,18 @@ export type InputField = BaseField & {
   pattern?: string;
 };
 
+export type TextGenerateField = BaseField & {
+  type: "text-generate";
+  min?: number;
+  max?: number;
+  step?: number;
+  pattern?: string;
+  generatorType: "sku" | "uuid" | "timestamp";
+  prefix?: string;
+  suffix?: string;
+  generateButtonText?: string;
+};
+
 export type TextareaField = BaseField & {
   type: "textarea";
   rows?: number;
@@ -66,6 +79,9 @@ export type SelectField = BaseField & {
   type: "select";
   options: SelectOption[];
   multiple?: boolean;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  emptyMessage?: string;
 };
 
 export type CheckboxField = BaseField & {
@@ -78,20 +94,13 @@ export type ImageListField = BaseField & {
   maxImages?: number;
 };
 
-export type GeneratorField = BaseField & {
-  type: "generator";
-  generatorType: "sku";
-  targetField: string;
-  prefix?: string;
-};
-
 export type Field =
   | InputField
+  | TextGenerateField
   | TextareaField
   | SelectField
   | CheckboxField
-  | ImageListField
-  | GeneratorField;
+  | ImageListField;
 
 type Props = {
   formSchema: FormSchema;
@@ -132,12 +141,41 @@ export const FormFieldGenerator = React.memo(({ formSchema }: Props) => {
   };
 
   // Generator functions
-  const generateSKU = (targetField: string, prefix: string = "PRD") => {
-    const timestamp = Date.now().toString().slice(-6);
-    const random = Math.random().toString(36).substring(2, 5).toUpperCase();
-    const generatedSKU = `${prefix}-${timestamp}-${random}`;
-    setValue(targetField, generatedSKU);
-    clearErrors(targetField);
+  const generateValue = (
+    fieldName: string, 
+    generatorType: string, 
+    prefix: string = "", 
+    suffix: string = ""
+  ) => {
+    let generatedValue = "";
+    
+    switch (generatorType) {
+      case "sku":
+        const timestamp = Date.now().toString().slice(-6);
+        const random = Math.random().toString(36).substring(2, 5).toUpperCase();
+        const skuPrefix = prefix || "PRD";
+        generatedValue = `${skuPrefix}-${timestamp}-${random}`;
+        break;
+      case "uuid":
+        generatedValue = crypto.randomUUID ? crypto.randomUUID() : 
+          'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
+        if (prefix || suffix) {
+          generatedValue = `${prefix}${generatedValue}${suffix}`;
+        }
+        break;
+      case "timestamp":
+        generatedValue = `${prefix}${Date.now()}${suffix}`;
+        break;
+      default:
+        generatedValue = `${prefix}${Date.now()}${suffix}`;
+    }
+    
+    setValue(fieldName, generatedValue);
+    clearErrors(fieldName);
   };
 
   // Image list management
@@ -227,6 +265,56 @@ export const FormFieldGenerator = React.memo(({ formSchema }: Props) => {
           </div>
         );
 
+      case "text-generate":
+        return (
+          <div key={field.id} className={`space-y-2 ${containerClass}`}>
+            <Label htmlFor={field.name} className="text-sm font-medium">
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+            </Label>
+            <div className="flex space-x-2">
+              <Input
+                id={field.name}
+                type="text"
+                {...register(field.name, {
+                  required: field.required ? `${field.label} is required` : false,
+                  pattern: field.pattern
+                    ? {
+                        value: new RegExp(field.pattern),
+                        message: `${field.label} format is invalid`,
+                      }
+                    : undefined,
+                })}
+                placeholder={field.placeholder}
+                disabled={field.disabled}
+                className={`${error ? "border-red-500" : ""} ${
+                  field.className || ""
+                }`}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  generateValue(
+                    field.name, 
+                    field.generatorType, 
+                    field.prefix || "", 
+                    field.suffix || ""
+                  );
+                }}
+                disabled={field.disabled}
+                className="whitespace-nowrap"
+              >
+                <Hash className="mr-2 h-4 w-4" />
+                {field.generateButtonText || `Generate ${field.generatorType.toUpperCase()}`}
+              </Button>
+            </div>
+            {error && (
+              <p className="text-sm text-red-500">{error.message as string}</p>
+            )}
+          </div>
+        );
+
       case "textarea":
         return (
           <div key={field.id} className={`space-y-2 ${containerClass}`}>
@@ -270,22 +358,38 @@ export const FormFieldGenerator = React.memo(({ formSchema }: Props) => {
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </Label>
-            <Select
-              onValueChange={(value) => handleSelectChange(field.name, value)}
-              value={watch(field.name) || ""}
-              disabled={field.disabled}
-            >
-              <SelectTrigger className={error ? "border-red-500" : ""}>
-                <SelectValue placeholder={field.placeholder} />
-              </SelectTrigger>
-              <SelectContent className="max-h-60 overflow-y-auto">
-                {field.options.map((option) => (
-                  <SelectItem key={option.value} value={String(option.value)}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {field.searchable ? (
+              <SearchableSelect
+                options={field.options.map(option => ({
+                  label: option.label,
+                  value: option.value
+                }))}
+                value={watch(field.name) || ""}
+                onValueChange={(value) => handleSelectChange(field.name, value)}
+                placeholder={field.placeholder}
+                searchPlaceholder={field.searchPlaceholder || "Search options..."}
+                emptyMessage={field.emptyMessage || "No options found."}
+                disabled={field.disabled}
+                className={error ? "border-red-500" : ""}
+              />
+            ) : (
+              <Select
+                onValueChange={(value) => handleSelectChange(field.name, value)}
+                value={watch(field.name) || ""}
+                disabled={field.disabled}
+              >
+                <SelectTrigger className={error ? "border-red-500" : ""}>
+                  <SelectValue placeholder={field.placeholder} />
+                </SelectTrigger>
+                <SelectContent className="max-h-60 overflow-y-auto">
+                  {field.options.map((option) => (
+                    <SelectItem key={option.value} value={String(option.value)}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             {error && (
               <p className="text-sm text-red-500">{error.message as string}</p>
             )}
@@ -382,29 +486,6 @@ export const FormFieldGenerator = React.memo(({ formSchema }: Props) => {
             {error && (
               <p className="text-sm text-red-500">{error.message as string}</p>
             )}
-          </div>
-        );
-
-      case "generator":
-        return (
-          <div key={field.id} className={`space-y-2 ${containerClass}`}>
-            <Label className="text-sm font-medium">{field.label}</Label>
-            <div className="flex space-x-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  if (field.generatorType === "sku") {
-                    generateSKU(field.targetField, field.prefix);
-                  }
-                }}
-                disabled={field.disabled}
-                className="w-full"
-              >
-                <Hash className="mr-2 h-4 w-4" />
-                Generate {field.generatorType.toUpperCase()}
-              </Button>
-            </div>
           </div>
         );
 

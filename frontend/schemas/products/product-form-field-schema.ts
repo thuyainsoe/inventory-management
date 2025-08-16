@@ -27,21 +27,15 @@ export const ProductFormFieldsSchema = ({
         },
         {
           id: 2,
-          type: "text" as const,
+          type: "text-generate" as const,
           name: "sku",
           label: "SKU",
           placeholder: "Enter SKU",
           required: true,
           pattern: "^[A-Z0-9-_]+$",
-        },
-        {
-          id: 3,
-          type: "generator" as const,
-          name: "sku-generator",
-          label: "Generate SKU",
           generatorType: "sku" as const,
-          targetField: "sku",
           prefix: "PRD",
+          generateButtonText: "Generate",
         },
         {
           id: 4,
@@ -58,6 +52,9 @@ export const ProductFormFieldsSchema = ({
           label: "Category",
           placeholder: "Select category",
           required: true,
+          searchable: true,
+          searchPlaceholder: "Search categories...",
+          emptyMessage: "No categories found.",
           options: categoryOptions,
         },
         {
@@ -67,6 +64,9 @@ export const ProductFormFieldsSchema = ({
           label: "Brand",
           placeholder: "Select brand",
           required: true,
+          searchable: true,
+          searchPlaceholder: "Search brands...",
+          emptyMessage: "No brands found.",
           options: brandOptions,
         },
         {
